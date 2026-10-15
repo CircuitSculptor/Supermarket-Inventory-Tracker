@@ -1,2 +1,3 @@
 # Supermarket-Inventory-Tracker
-Project GitHub Repository
+
+Here I will document my project through out the year
