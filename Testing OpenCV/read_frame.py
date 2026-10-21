@@ -1,7 +1,7 @@
 import cv2
  
 # Open the video file
-cap = cv2.VideoCapture("/assets/Example-Video.mp4")
+cap = cv2.VideoCapture("assets\\Example-Video.mp4")
  
 # Check if the video was opened successfully
 if not cap.isOpened():
