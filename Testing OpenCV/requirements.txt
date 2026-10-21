@@ -1,2 +1,5 @@
 opencv-python>=4.10.0
 Matplotlib>=3.7.1
+keras
+keras-hub
+tensorflow
