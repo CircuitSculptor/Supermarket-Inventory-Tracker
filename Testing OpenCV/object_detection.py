@@ -17,3 +17,9 @@ for (x, y, w, h) in found:
 
 plt.imshow(img_rgb)
 plt.show()
+
+# It appears that the raw image is displayed with plt.imgshow(img_rgb) but
+# then the script ends on cv2 has no attribute 'CascadeClassifier'
+# I will revisit this code later
+
+# TODO: Fix CascadeClassifier issue
