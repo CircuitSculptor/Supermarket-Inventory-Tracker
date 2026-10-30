@@ -6,9 +6,19 @@
 #
 # Have a question about this library?  Ask on the forums here:  http://forum.dexterindustries.com/c/grovepi
 #
-
 # Released under the MIT license (http://choosealicense.com/licenses/mit/).
 # For more information see https://github.com/DexterInd/GrovePi/blob/master/LICENSE
+# 
+###############################################################################################################################################
+
+# Success - This is exactly the behavior I wanted.  
+# If the motor driver power disconnects but reconnects within 5 seconds, the program will restart its routine
+#
+# reset_motor_driver is an additional circuit I made for the driver to reset it remotely with the script for when the power disconnects and reconnects.
+#
+# I see that many people are using this exact driver board, some with Pi's and others with esp32 etc. 
+# They may have the same problems as I had.
+#
 
 import errno
 import time,sys
@@ -26,6 +36,25 @@ def reset_motor_driver():
     sleep(0.1)
     reset.off()  
     sleep(1)  
+
+def main():
+        m = motor_driver()
+        # FORWARD
+        print("Forward")
+        m.MotorSpeedSetAB(100, 100)
+        m.MotorDirectionSet(0b1010)
+        time.sleep(2)
+
+        # BACK
+        print("Back")
+        m.MotorSpeedSetAB(100, 100)
+        m.MotorDirectionSet(0b0101)
+        time.sleep(2)
+
+        # STOP
+        print("Stop")
+        m.MotorSpeedSetAB(0, 0)
+        time.sleep(1)
 
 class motor_driver:
 
@@ -69,10 +98,6 @@ class motor_driver:
         time.sleep(.02)
 
 if __name__ == "__main__":
-    m = motor_driver()
-
-    #reset_motor_driver()
-    #print("Motor driver reset")
 
     try:
         reset_motor_driver()
@@ -83,41 +108,25 @@ if __name__ == "__main__":
 
     while True:
         try:
-            # FORWARD
-            print("Forward")
-            m.MotorSpeedSetAB(100, 100)
-            m.MotorDirectionSet(0b1010)
-            time.sleep(2)
-
-            # BACK
-            print("Back")
-            m.MotorSpeedSetAB(100, 100)
-            m.MotorDirectionSet(0b0101)
-            time.sleep(2)
-
-            # STOP
-            print("Stop")
-            m.MotorSpeedSetAB(0, 0)
-            time.sleep(1)
+            main()
 
         except Exception as e:
-            print("Motor Stop - Error: {}".format(e))
-            #sys.exit(1)
+            print("Power failure - Error: {}".format(e))
             try:
-                while True:
-                    print("Error: {}".format(e))
-                    time.sleep(5)
-                    reset_motor_driver()
-                    print("Motor driver reset")
-                
+                time.sleep(5)
+                reset = OutputDevice(17, initial_value=False)
+                print("Motor driver reset")
+                reset_motor_driver()
+                reset.off()
+                reset.close()
+
+                time.sleep(2)
+                main()
+
             except Exception as e:
-                print("Check power - Error: {}".format(e))
+                print("Check Power Source - Error: {}".format(e))
                 sys.exit(1)
 
-            #finally:
-            #    reset.off()
-            #    reset.close()
-        
         except KeyboardInterrupt:
-            print(" Motor Stop")
+            print(" Keyboard Interrupt - Motor Stop")
             sys.exit(0)
