@@ -1,7 +1,8 @@
 import cv2
  
 # Open the video file
-cap = cv2.VideoCapture("assets\\Example-Video.mp4")
+#cap = cv2.VideoCapture("assets\\Example-Video.mp4") # Laptop version
+cap = cv2.VideoCapture("assets/Example-Video.mp4") # Pi version
  
 # Check if the video was opened successfully
 if not cap.isOpened():
