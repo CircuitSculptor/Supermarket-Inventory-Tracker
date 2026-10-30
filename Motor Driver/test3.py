@@ -10,6 +10,7 @@
 # Released under the MIT license (http://choosealicense.com/licenses/mit/).
 # For more information see https://github.com/DexterInd/GrovePi/blob/master/LICENSE
 
+import errno
 import time,sys
 from smbus2 import SMBus
 
@@ -83,7 +84,15 @@ if __name__ == "__main__":
             m.MotorSpeedSetAB(0, 0)
             sys.exit(0)
         
-        except Exception as e:
-            print(" Motor Stop - Error: {}".format(e))
-            m.MotorSpeedSetAB(0, 0)
-            sys.exit(1)
+        #except Exception as e:
+        #    print("Motor Stop - Error: {}".format(e))
+        #    m.MotorSpeedSetAB(0, 0)
+        #    sys.exit(0) # 1
+
+        #except OSError as e:
+        #    if e.errno == errno.EREMOTEIO:
+        #        print("Motor Stop - Remote I/O error: {}".format(e))
+        #        m.MotorSpeedSetAB(0, 0)
+        #        sys.exit(0) # 1
+        #    else:
+        #        raise
