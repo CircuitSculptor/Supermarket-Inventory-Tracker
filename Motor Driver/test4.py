@@ -71,8 +71,15 @@ class motor_driver:
 if __name__ == "__main__":
     m = motor_driver()
 
-    reset_motor_driver()
-    print("Motor driver reset")
+    #reset_motor_driver()
+    #print("Motor driver reset")
+
+    try:
+        reset_motor_driver()
+        print("Motor driver reset")
+    finally:
+        reset.off()
+        reset.close()
 
     while True:
         try:
@@ -92,8 +99,11 @@ if __name__ == "__main__":
             print("Stop")
             m.MotorSpeedSetAB(0, 0)
             time.sleep(1)
+
+        except Exception as e:
+            print("Motor Stop - Error: {}".format(e))
+            sys.exit(1)
         
         except KeyboardInterrupt:
             print(" Motor Stop")
-            m.MotorSpeedSetAB(0, 0)
             sys.exit(0)
