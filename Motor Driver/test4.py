@@ -102,7 +102,19 @@ if __name__ == "__main__":
 
         except Exception as e:
             print("Motor Stop - Error: {}".format(e))
-            sys.exit(1)
+            #sys.exit(1)
+            try:
+                time.sleep(5)
+                reset_motor_driver()
+                print("Motor driver reset")
+
+            except Exception as e:
+                print("Check power - Error: {}".format(e))
+                sys.exit(1)
+
+            finally:
+                reset.off()
+                reset.close()
         
         except KeyboardInterrupt:
             print(" Motor Stop")
