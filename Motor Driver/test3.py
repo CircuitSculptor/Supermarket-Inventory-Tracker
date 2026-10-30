@@ -60,19 +60,30 @@ if __name__ == "__main__":
     m = motor_driver()
 
     while True:
-        # FORWARD
-        print("Forward")
-        m.MotorSpeedSetAB(100, 100)
-        m.MotorDirectionSet(0b1010)
-        time.sleep(2)
+        try:
+            # FORWARD
+            print("Forward")
+            m.MotorSpeedSetAB(100, 100)
+            m.MotorDirectionSet(0b1010)
+            time.sleep(2)
 
-        # BACK
-        print("Back")
-        m.MotorSpeedSetAB(100, 100)
-        m.MotorDirectionSet(0b0101)
-        time.sleep(2)
+            # BACK
+            print("Back")
+            m.MotorSpeedSetAB(100, 100)
+            m.MotorDirectionSet(0b0101)
+            time.sleep(2)
 
-        # STOP
-        print("Stop")
-        m.MotorSpeedSetAB(0, 0)
-        time.sleep(1)
+            # STOP
+            print("Stop")
+            m.MotorSpeedSetAB(0, 0)
+            time.sleep(1)
+        
+        except KeyboardInterrupt:
+            print(" Motor Stop")
+            m.MotorSpeedSetAB(0, 0)
+            sys.exit(0)
+        
+        except Exception as e:
+            print(" Motor Stop - Error: {}".format(e))
+            m.MotorSpeedSetAB(0, 0)
+            sys.exit(1)
