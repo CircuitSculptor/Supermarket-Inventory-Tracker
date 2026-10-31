@@ -3,6 +3,8 @@ import time,sys
 from smbus2 import SMBus
 from gpiozero import OutputDevice
 from time import sleep
+import termios
+import tty
 
 bus = SMBus(1)
 reset = OutputDevice(17, initial_value=False)
@@ -53,15 +55,60 @@ def stop_motors():
 
 
 def main():
-    move_forward()
-    time.sleep(3)
-    move_backwards()
-    time.sleep(3)
-    move_left()
-    time.sleep(3)
-    move_right()
-    time.sleep(3)
-    stop_motors()
+
+    fd = sys.stdin.fileno()
+    # Save terminal state
+    terminal_state = termios.tcgetattr(fd)
+
+    print("Hold W/A/S/D to drive robot. Press B to brake (stop motors). Q to Exit", flush=True)
+    try:
+        # Make the terminal not require pressing Enter for each input
+        tty.setcbreak(fd)
+        while True:
+            key = sys.stdin.read(1).lower()
+
+            if key == "q":
+                break
+            if key in "wasdb":
+                #print(f"Pressed: {key}", flush=True)
+                match key:
+                    case "w":
+                        move_forward()
+                    case "a":
+                        move_left()
+                    case "s":
+                        move_backwards()
+                    case "d":
+                        move_right()
+                    case "b":
+                        stop_motors()
+                    case "r":
+                        reset_motor_driver()
+                    case _:
+                        print("Invalid Input. Hold W/A/S/D to drive robot. Press B to brake (stop motors). Q to Exit", flush=True)
+
+    except Exception as e:
+        print("Error: {}".format(e))
+        sys.exit(1)
+
+    except KeyboardInterrupt:
+        print("Keyboard Interrupt")
+        stop_motors()
+        sys.exit(0)
+
+    # Restore terminal settings on Keyboard Interrput or crash
+    finally:
+        termios.tcsetattr(fd, termios.TCSADRAIN, terminal_state)
+
+    #move_forward()
+    #time.sleep(3)
+    #move_backwards()
+    #time.sleep(3)
+    #move_left()
+    #time.sleep(3)
+    #move_right()
+    #time.sleep(3)
+    #stop_motors()
 
 class motor_driver:
 
