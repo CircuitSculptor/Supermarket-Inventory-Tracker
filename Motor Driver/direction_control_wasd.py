@@ -5,6 +5,7 @@ from gpiozero import OutputDevice
 from time import sleep
 import termios
 import tty
+import select
 
 bus = SMBus(1)
 reset = OutputDevice(17, initial_value=False)
@@ -49,7 +50,7 @@ def move_right():
 
 def stop_motors():
     m = motor_driver()
-    print("Stop")
+    print("Stop\n")
     m.MotorSpeedSetAB(0, 0)
     time.sleep(1)
 
@@ -60,11 +61,22 @@ def main():
     # Save terminal state
     terminal_state = termios.tcgetattr(fd)
 
+    timeout = 0.5
+    moving = False
+
     print("Hold W/A/S/D to drive robot. Press B to brake (stop motors). Q to Exit", flush=True)
     try:
         # Make the terminal not require pressing Enter for each input
         tty.setcbreak(fd)
         while True:
+            ready, _, _ = select.select([sys.stdin], [], [], timeout)
+
+            if not ready:
+                if moving:
+                    stop_motors()
+                    moving = False
+                continue
+
             key = sys.stdin.read(1).lower()
 
             if key == "q":
@@ -74,12 +86,16 @@ def main():
                 match key:
                     case "w":
                         move_forward()
+                        moving = True
                     case "a":
                         move_left()
+                        moving = True
                     case "s":
                         move_backwards()
+                        moving = True
                     case "d":
                         move_right()
+                        moving = True
                     case "b":
                         stop_motors()
                     case "r":
@@ -99,16 +115,6 @@ def main():
     # Restore terminal settings on Keyboard Interrput or crash
     finally:
         termios.tcsetattr(fd, termios.TCSADRAIN, terminal_state)
-
-    #move_forward()
-    #time.sleep(3)
-    #move_backwards()
-    #time.sleep(3)
-    #move_left()
-    #time.sleep(3)
-    #move_right()
-    #time.sleep(3)
-    #stop_motors()
 
 class motor_driver:
 
