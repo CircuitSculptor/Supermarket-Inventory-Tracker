@@ -35,26 +35,31 @@ def reset_motor_driver():
     reset.on()   
     sleep(0.1)
     reset.off()  
-    sleep(1)  
+    sleep(1)
+
+def stop_motors():
+    m = motor_driver()
+    print("Motors stopped")
+    m.MotorSpeedSetAB(0, 0)
 
 def main():
-        m = motor_driver()
-        # FORWARD
-        print("Forward")
-        m.MotorSpeedSetAB(100, 100)
-        m.MotorDirectionSet(0b1010)
-        time.sleep(2)
+    m = motor_driver()
+    # FORWARD
+    print("Forward")
+    m.MotorSpeedSetAB(100, 100)
+    m.MotorDirectionSet(0b1010)
+    time.sleep(2)
 
-        # BACK
-        print("Back")
-        m.MotorSpeedSetAB(100, 100)
-        m.MotorDirectionSet(0b0101)
-        time.sleep(2)
+    # BACK
+    print("Back")
+    m.MotorSpeedSetAB(100, 100)
+    m.MotorDirectionSet(0b0101)
+    time.sleep(2)
 
-        # STOP
-        print("Stop")
-        m.MotorSpeedSetAB(0, 0)
-        time.sleep(1)
+    # STOP
+    print("Stop")
+    m.MotorSpeedSetAB(0, 0)
+    time.sleep(1)
 
 class motor_driver:
 
@@ -129,4 +134,5 @@ if __name__ == "__main__":
 
         except KeyboardInterrupt:
             print(" Keyboard Interrupt - Motor Stop")
+            stop_motors()
             sys.exit(0)
