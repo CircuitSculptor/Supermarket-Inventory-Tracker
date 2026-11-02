@@ -10,6 +10,9 @@ import select
 bus = SMBus(1)
 reset = OutputDevice(17, initial_value=False)
 
+leftMotorSpeed = 200
+rightMotorSpeed = 200
+
 def reset_motor_driver():
     reset.on()   
     sleep(0.1)
@@ -20,7 +23,7 @@ def move_forward():
     m = motor_driver()
     # FORWARD
     print("Forward")
-    m.MotorSpeedSetAB(100, 100)
+    m.MotorSpeedSetAB(leftMotorSpeed, rightMotorSpeed)
     m.MotorDirectionSet(0b1010)
     #time.sleep(2)
 
@@ -28,7 +31,7 @@ def move_backwards():
     m = motor_driver()
     # BACK
     print("Back")
-    m.MotorSpeedSetAB(200, 200)
+    m.MotorSpeedSetAB(leftMotorSpeed, rightMotorSpeed)
     m.MotorDirectionSet(0b0101)
     #time.sleep(2)
 
@@ -36,7 +39,7 @@ def move_left():
     m = motor_driver()
     # LEFT
     print("Left")
-    m.MotorSpeedSetAB(200, 200)
+    m.MotorSpeedSetAB(leftMotorSpeed, rightMotorSpeed)
     m.MotorDirectionSet(0b1001)
     #time.sleep(2)
 
@@ -44,7 +47,7 @@ def move_right():
     m = motor_driver()
     # RIGHT
     print("Right")
-    m.MotorSpeedSetAB(200, 200)
+    m.MotorSpeedSetAB(leftMotorSpeed, rightMotorSpeed)
     m.MotorDirectionSet(0b0110)
     #time.sleep(2)
 
