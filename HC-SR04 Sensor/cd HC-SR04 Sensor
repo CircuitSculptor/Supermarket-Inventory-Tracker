@@ -1,2 +1,4 @@
+source .venv/bin/activate
+
 cd './Supermarket-Inventory-Tracker/HC-SR04 Sensor'
 cd 'HC-SR04 Sensor'
