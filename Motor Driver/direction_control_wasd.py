@@ -6,6 +6,7 @@ from time import sleep
 import termios
 import tty
 import select
+import os
 
 bus = SMBus(1)
 reset = OutputDevice(17, initial_value=False)
@@ -84,6 +85,7 @@ def main():
 
             if key == "q":
                 break
+
             if key in "wasdb":
                 #print(f"Pressed: {key}", flush=True)
                 match key:
@@ -101,10 +103,14 @@ def main():
                         moving = True
                     case "b":
                         stop_motors()
+                        moving = False
                     case "r":
                         reset_motor_driver()
                     case _:
                         print("Invalid Input. Hold W/A/S/D to drive robot. Press B to brake (stop motors). Q to Exit", flush=True)
+            # flush code
+            termios.tcflush(sys.stdin, termios.TCIOFLUSH)
+
 
     except Exception as e:
         print("Error: {}".format(e))
