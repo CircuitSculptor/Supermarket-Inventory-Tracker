@@ -17,6 +17,7 @@ while True:
         time.sleep(0.500)
 
     except KeyboardInterrupt:
-        print("Measurement stopped by User")
+        print(" Measurement stopped by User")
+        break
     finally:
         GPIO.cleanup((trig, echo))
