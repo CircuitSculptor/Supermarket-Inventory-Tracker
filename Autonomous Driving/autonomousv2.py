@@ -60,7 +60,7 @@ def move_right():
 
 def stop_motors():
     m = motor_driver()
-    print("Stop\n")
+    #print("Stop\n") # found that this print was anoying
     m.MotorSpeedSetAB(0, 0)
     time.sleep(1)
 
@@ -82,7 +82,7 @@ def main():
     print("Enter s to start, q to stop, or press Ctrl+C to exit.")
 
     try:
-        # Start code from both motors stopped
+        # start code from both motors stopped
         stop_motors()
 
         while True:
@@ -90,7 +90,7 @@ def main():
             if select.select([sys.stdin], [], [], 0)[0]:
                 line = sys.stdin.readline()
 
-                # Stop if the terminal input closes.
+                # stop if the terminal input closes.
                 if line == "":
                     break
 
@@ -101,6 +101,7 @@ def main():
                     autonomous = True
                 elif key == "q":
                     autonomous = False
+                    print("Enter s to start, q to stop, or press Ctrl+C to exit.")
                 else:
                     print("Invalid input. Enter s or q.")
 
@@ -130,7 +131,14 @@ def main():
             elif state == "reversing":
                 if now - state_started >= REVERSE_SECONDS:
                     stop_motors()
-                    move_left()
+
+                    # turn in a random direction to prevent the robot driving in circles
+                    random_direction = time.time() % 2 # random function
+                    if random_direction < 1:
+                        move_left()
+                    else:
+                        move_right()
+
                     state = "turning"
                     state_started = time.monotonic()
 
@@ -139,9 +147,7 @@ def main():
                     stop_motors()
                     state = "forward"
 
-            # Short pause to avoid running the loop unnecessarily fast.
             time.sleep(0.1)
-
 
     except Exception as e:
         print("Error: {}".format(e))
@@ -155,7 +161,6 @@ def main():
     finally:
         GPIO.cleanup((trig, echo))
         
-
 class motor_driver:
 
     MotorSpeedSet             = 0x82
