@@ -154,12 +154,16 @@ def main():
         sys.exit(1)
 
     except KeyboardInterrupt:
-        print("Keyboard Interrupt")
+        print(" Keyboard Interrupt")
         stop_motors()
         sys.exit(0)
 
     finally:
-        GPIO.cleanup((trig, echo))
+        try:
+            GPIO.cleanup((trig, echo))
+        except Exception as e:
+            print("Error during GPIO cleanup: {}".format(e))
+
         
 class motor_driver:
 
