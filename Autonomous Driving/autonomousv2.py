@@ -3,7 +3,7 @@ import time,sys
 from smbus2 import SMBus
 from gpiozero import OutputDevice
 import RPi.GPIO as GPIO
-from hcsr04sensor import sensor
+from hcsr04sensor import sensor # python -m pip install "hcsr04sensor==1.7" RPi.GPIO
 import time
 from time import sleep
 #import termios
@@ -69,7 +69,7 @@ def main():
 
     OBSTACLE_CM = 30
     REVERSE_SECONDS = 0.5
-    TURN_SECONDS = 0.5
+    TURN_SECONDS = 0.6
 
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BCM)
