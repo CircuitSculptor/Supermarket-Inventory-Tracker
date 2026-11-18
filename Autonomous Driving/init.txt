@@ -1,0 +1,11 @@
+Step 1
+source .venv/bin/activate
+
+Step 2
+cd 'Autonomous Driving'
+
+Step3
+python -m pip install "hcsr04sensor==1.7" RPi.GPIO
+
+Step4
+python3 autonomousv2.py
